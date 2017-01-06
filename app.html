@@ -1,0 +1,875 @@
+<!DOCTYPE html PUBLIC>
+<html lang="en" class="no-js" style="visibility: hidden;">
+
+<head>
+	<title>SQLite Editor</title>
+	<meta charset="utf-8">
+	<meta name="description" content="sqlite editor">
+	<meta name="viewport" content="width=device-width">
+	
+	<link rel="stylesheet" href="./app/css/sqeek.css">
+	<link rel="stylesheet" href="./app/css/tabstyles.css">
+	
+	<link rel="stylesheet" href="./app/libs/theme/cmirror.css">
+	<link rel="stylesheet" href="./app/libs/theme/ambiance.css">
+	<link rel="stylesheet" href="./app/libs/theme/custom.css">
+	
+	<!-- link rel="stylesheet" type="text/css" href="./app/css/font-awesome.min.css" -->
+	
+	<style>
+	 .CodeMirror { height: auto; }
+	 .CodeMirror.cm-s-ambiance { background: #282218; }
+	 .CodeMirror.cm-s-custom { background: #333028; }
+	 .CodeMirror-matchingbracket { outline: 1px solid grey; }
+	</style> <!-- cover any over-written .css -->
+	
+</head>
+
+<body>
+	
+	<!-- login -->
+	<!-- a href="#Select+user" id="select_user" onclick="return Page.selectUser()">Select user</a -->
+	
+	<!-- top nav -->
+	<div class="nav">
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					
+					<!-- sql --><!-- OR --><!-- chat -->
+					<!-- a href="#Select+user" id="select_user" onclick='return Page.selectUser()'>Select user</a -->
+					<div id="chat" style="position: absolute; left: 278px; top: 4px; z-index: 50; width: 280px;">
+					  <input id="message" value="" type="text" class="submit" size="17"  onkeypress="if (event.keyCode == 13) Page.sendMessage()"><!-- id="shell" -->
+					  <button id="send" type="submit" onclick="return Page.sendMessage()">SEND</button>
+					</div>
+					
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					
+					<!-- home -->
+					<div class="nav-collapse collapse">
+						<ul class="nav" style="margin: 0 0 0 103px;">
+							
+							<!-- this.target = window.parent; this.window.parent.style.opacity='0.1'; -->
+							
+							<li class="active">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="this.style.opacity='0.4';">
+									<span class="icon icon-home"></span>Home</a>
+								
+								<!-- to do -->
+								<ul class="dropdown-menu">
+									<p><font color="#E0D0C0" size="4"><b><i>&nbsp;to do..</i></b></font><br>
+									 <br><font color="#F01010" size="4">/edit /save  etc</font><br><br>
+									 <span class="label"><font color="#F0E000" size="4">user account admin </font></span><br><br>
+									 <span class="label"><font color="#00DD00" size="4">window.parent.style </font></span><br><br>
+									</p>
+								</ul>
+							</li>
+							
+							<!-- DB load via http link (ajax) not filesystem path -->
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Load</a>
+								<ul class="dropdown-menu" style="padding: 0 0 0 7px; width: 300px;">
+									<li class="divider"></li>
+									<li><textarea id="dbLink0" style="width: 97%; text-align: center;">./app/data/sqeek.db</textarea></li>
+									<li><textarea id="dbLink1" style="width: 97%; text-align: center;">./app/db/ZeroMe.db</textarea></li>
+									<li><textarea id="dbLink2" style="width: 97%; text-align: center;">./app/db/chaincode.db</textarea></li>
+									<li><textarea id="dbLink3" style="width: 97%; text-align: center;">./app/sites/1pandam/pandam.db</textarea></li>
+									<li><textarea id="dbLink4" style="width: 97%; text-align: center;">./app/sites/nullpaste/np.db</textarea></li>
+									<li><textarea id="dbLink5" style="width: 97%; text-align: center;">./app/sites/zerochat/zchat.db</textarea></li>
+									<li><textarea id="dbLink6" style="width: 97%; text-align: center;">./app/sites/zites_2016.db</textarea></li>
+									<img src="./app/icons/new_icon.jpg" style="position: relative; top: -30px; left: 15px;">
+									<li class="divider"></li>
+								</ul>
+							</li>
+							
+							<!-- title / about -->
+							<name id="sqeek" style="position: absolute; top 6px; left: -111px;"> 
+							  <li class="dropdown">
+								<span class="dropdown-toggle" data-toggle="dropdown">
+									<!-- spacer -->
+									<div style="margin: 10px; z-index: 41;">
+										<a href="#" class="logo">Sqeek</a>
+									</div>
+									<!-- version -->
+									<span id="version" class="logo" style="position: absolute; top: 16px; left: 58px; font-size: 0.85em; opacity: 0.6;">v0.02</span>
+								</span>
+								
+								<ul class="dropdown-menu" style="margin: 100px 0 0 340px; padding: 10px 105px 10px 105px;">
+								
+									<!-- status -->
+									<div style="margin: 0 26px 0 26px; width: 200px">
+										<li><font color="#706060">ZITE EDITOR</font>&nbsp;<a href="#about">v0.01 [pre-alpha]</a></li><!-- version -->
+										<!-- href #about: show change.log? -->
+										<li><font color="#C0A0A0">{done}</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">...(WIP)...</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Load/View DB</font></li>
+										<li><font color="#C0A0A0">{to do}</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Chat</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Load/Edit Json</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Load/Edit/Save Lists</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Config App </font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Edit/Save DB</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Save Json</font></li>
+										<li><font color="#777060" style="margin: 0 0 0 40px;">Share Lists</font></li>
+										
+										<!-- spacer -->
+										<li class="divider"></li>
+										
+									</div>
+										
+									<li class="nav-header"><u>Credits</u></li>
+									<li style="margin: 0 0 0 40px;"><a href="https://github.com/agershun/alasql">Alasql</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="https://kripken.github.io/sql.js">sql.js</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="https://codemirror.net/">CodeMirror</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="http://127.0.0.1:43110/1B8LmXYHzMGZzcRWoidAQb5SmKSyfjN63f/">ZeroToDo</a></li>
+									
+									<li class="divider"></li>
+									
+									<li class="nav-header"><u>Zeronet Zites by Kustomzone</u></li>
+									<li style="margin: 0 0 0 40px;"><a href="http://127.0.0.1:43110/1PANDAML8mLaRKPinGihTj5RkJV15awcjs" target="_blank">PANDAM</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="http://127.0.0.1:43110/1NFUSEDZjmCFJE1JSG5UjwCRK6zDwQRQd7" target="_blank">1NFUSED</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="http://127.0.0.1:43110/1SQEEKkYzZuwo7X37EcET5wP6B3yAJZYo"  target="_blank">SQEEK</a></li>
+									<li style="margin: 0 0 0 40px;"><a href="http://127.0.0.1:43110/1CHESSMTP3DDGu4VdrPEhp6gfHLseed2Xg" target="_blank">ZEROCHESS</a></li>
+									
+									<li class="divider"></li>
+									
+									<li class="nav-header"><u>Contact: github@kustomzone.com</u></li>
+									
+								</ul>
+							  </li>
+							</name>
+							
+							<!------------------------- spacer -------------------------->
+							<!-- li><a href="#" style="width: 0px; cursor: arrow;"></a></li -->
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /top nav -->
+	
+	
+	<!-- container -->
+	<div class="bind">
+		<div class="st-container">
+			<div class="st-pusher">
+				<div class="st-content">
+					<div class="container">
+						<div class="tabs tabs-style-topline" style="background-color: #F2F1E0 !important;">
+							<section>
+								
+								<nav id="tabs">
+									<ul>
+										<li class="tabs-top"><a href="#section-topline-1" class="icon icon-box">    <span> Open </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-2" class="icon icon-tools">  <span> Edit </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-3" class="icon icon-date">   <span> SQL </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-4" class="icon icon-display"><span> Log  </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-5" class="icon icon-upload"> <span> Save </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-6" class="icon icon-config"> <span> Config </span></a></li>
+										<li class="tabs-top"><a href="#section-topline-7" class="icon icon-joy">    <span> Demo </span></a></li>
+										
+									</ul>
+								</nav>
+								
+								<div class="content-wrap" style = "background-color: #F1F0E0 !important;">
+									
+									<!-- section 1 --><!-- open -->
+									<section id="section-topline-1">
+									
+										<ul class="tables nav nav-tabs"> </ul>
+										
+										<!-- file manager here -->
+										
+										<!-- slider / results per table -->
+										
+										<!-- var db = new SQL... // Open SQLite Database -->
+										<br>
+										<div id="messages"></div>
+										
+									</section>
+									
+									<!-- section 2 --><!-- view -->
+									<section id="section-topline-2">
+										
+										<ul class="tables nav nav-tabs"> </ul>
+										
+										<!-- view columns -->
+										<div id="table" class="table-editable">
+											<table class="table table-hover table-striped table-container"></table>
+										</div>
+										
+										<br>
+										
+										<!-- todo: json-server (typicode/json-server) -->
+										<div id="json-viewer">
+											<!-- button type="button" id="json-load" style="opacity: 0.75;">Load</button -->
+											<button type="button" id="json-view" style="opacity: 0.75;">Edit</button>
+											
+											<!-- json editor -->
+											<button type="button" id="json-save" style="opacity: 0.35;">Save</button><br>
+											<textarea id="output" style="height: 300px; display: none;"></textarea>
+											
+											<hr>
+											
+										</div>
+										
+									</section>
+									
+									<!-- section 3 --><!-- edit -->
+									<section id="section-topline-3">
+										
+										<ul class="tables nav nav-tabs"> </ul>
+										
+										<br>
+										
+										<!-- sql editor -->
+										<div class="span4">
+											<textarea id="commands">CREATE TABLE IF NOT EXISTS Test;</textarea>
+											<button id="sqlButt" style="margin: 7px 0 0 0; opacity: 1.0;">RUN</button>
+										</div>
+										
+										<hr>
+										
+										<!---- fixing ---->
+										<!-- basic CRUD -->
+										<button id="btnCreate" type="submit" onclick="$('#newtable').toggle()" style="opacity: 0.75;">Create</button>
+										<button id="btnReset"  type="submit" style="opacity: 0.4;">Reset </button>
+										<button id="btnUpdate" type="submit" style="opacity: 0.4;">Update</button>
+										<button id="btnDrop"   type="submit" style="opacity: 0.4;">Drop  </button>
+										
+										<hr>
+										
+										<!-- add table -->
+										<div id="newtable" class="table-editable" style="display: none;">
+											<table class="table">
+												<tr>
+													<th>New Table</th>
+													<th>Type</th>
+													<th>Size</th>
+													<th></th>
+												</tr>
+												<!-- Clonable table -->
+												<tr class="hide">
+													<td contenteditable="true"><b>...</b></td>
+													<td contenteditable="true"><b>...</b></td>
+													<td contenteditable="true"><b>...</b></td>
+													<td>
+														<!--spacer --><span style="margin: 40px;"></span>
+														<span class="table-add"     style = "cursor: pointer;"> Add </span>
+														<!--spacer --><span style="margin: 15px;"></span>
+														<span class="table-remove " style = "cursor: pointer;"> Remove </span>
+														<!--spacer --><span style="margin: 40px;"></span>
+														<span class="table-up "     style = "cursor: pointer;"> Up </span>
+														<!--spacer --><span style="margin: 15px;"></span>
+														<span class="table-down"    style = "cursor: pointer;"> Down </span>
+													</td>
+												</tr>
+											</table>
+										</div>
+										
+										<hr>
+										
+										<!-- add column -->
+										<div id="table3" class="table-editable" style="display: none;">
+											<table class="table">
+												<tr>
+													<th><span class="table-add" style = "cursor: pointer;">New Field</span></th>
+													<th>Value</th>
+													<th></th>
+												</tr>
+												<tr class="hide">
+													<td contenteditable="true"><b>...</b></td>
+													<td contenteditable="true"><b>...</b></td>
+													<td>
+														<!--spacer --><span style="margin: 77px;"></span>
+														<span class="table-add"     style = "cursor: pointer;"> Add </span>
+														<!--spacer --><span style="margin: 15px;"></span>
+														<span class="table-remove " style = "cursor: pointer;"> Remove </span>
+														<!--spacer --><span style="margin: 40px;"></span>
+														<span class="table-up "  style = "cursor: pointer;"> Up</span>
+														<!--spacer --><span style="margin: 15px;"></span>
+														<span class="table-down" style = "cursor: pointer;"> Down </span>
+													</td>
+												</tr>
+											</table>
+										</div>
+
+										<hr>
+										
+										<!-- modal -->
+										<div class="row hidden">
+										  <div id="id_new-row-modal" class="modal hide fade" tabindex="-1" role="dialog">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+												<h3>New Item</h3>
+											</div>
+											<div class="modal-body">
+												<form class="new-row-form form-horizontal"></form>
+											</div>
+											<div class="modal-footer">
+												<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+												<button class="row-save btn btn-primary" data-dismiss="modal">Save</button>
+											</div>
+										  </div>
+										</div>
+									
+									</section>
+									
+									<!-- section 4 --><!-- log -->
+									<section id="section-topline-4">
+										
+										<ul class="tables nav nav-tabs"></ul>
+										
+										<div style="margin-right: auto; margin-left: auto; width: 90%;">
+											
+											<br>
+											<p><span id="note" style="font-size: 3em;"><br> nothin' to see yet</span></p>
+											
+											<!-- sql log -->
+											<div id="log">
+												<div id="myconsole"></div>
+											</div>
+											
+										</div>
+									</section>
+									
+									<!-- section 5 --><!-- save -->
+									<section id="section-topline-5">
+										
+										<ul class="tables nav nav-tabs"></ul>
+										
+										<!-- todo -->
+										<br>
+										<p><span style="font-size: 3em;"><br> nothin' to see yet</span></p>
+										
+										<form action="#save">
+											
+											<fieldset>
+												
+												<legend>Sync SQL</legend>
+												<!-- div><button onclick="showDiff();">Select File</button></div -->
+												
+												<div id="showDiff" style="color: red; opacity: 0.3;">
+												 <h4>{ pending}</h4> <br>
+												</div>
+												
+												<!-- download -->
+												<div class="pull-right">
+													<!-- a class="btn btn-primary btn-large" id="dbLink">Download database</a -->
+													<div class="row">
+														<div class="span1" style="padding-top:10px">
+															<a class="btn btn-small new-row" id="dbDrag" style="cursor: move;" data-toggle="tooltip" data-placement="right" title="Drag to this your desktop to download"><i class="icon-file"></i> test.sqlite</a>
+														</div>
+													</div>
+												</div>
+												
+											</fieldset>
+											
+										</form>
+									</section>
+									
+									<!-- section 6 --><!-- config -->
+									<section id="section-topline-6">
+										
+										<ul class="tables nav nav-tabs"></ul>
+										
+										<!-- date/time config ... todo -->
+										
+										<table width="100%" cellpadding="5">
+										
+										  <form name="ivnForm" onsubmit="return false" style="margin:0;">
+											<tbody>
+											 <b>Current Date/Time:</b>&nbsp;<input type="checkbox" name="GMT" accesskey="g" onchange="populateDates();" checked="checked"> (GMT)
+											 <tr valign="top"><td>
+												<div id="dynamo" class="code" style="border: 1px black solid; border-left: 0; border-right: 0; padding-top: 25px; padding-left: 250px; background-color: #FFFFDD; height: 40px;">
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(conversion will appear here)
+												</div>
+											 </td></tr>
+											</tbody>
+											
+											<h3>
+											<table width="420" style="border: 1px black solid; border-left: 0; border-right: 0; background-color: #FFFFDD;">
+											 <tbody>
+											  <tr>
+												<td class="content" nowrap="">New Date:</td>
+											    <td width="100">
+											      <select name="month" accesskey="1" onchange="if(window.getDays) window.getDays(this,this.form.day,this.form.year)">
+											      <option value="0">January</option>
+											      <option value="1">February</option>
+											      <option value="2">March</option>
+											      <option value="3">April</option>
+											      <option value="4">May</option>
+											      <option value="5">June</option>
+											      <option value="6">July</option>
+											      <option value="7">August</option>
+											      <option value="8">September</option>
+											      <option value="9">October</option>
+											      <option value="10">November</option>
+											      <option value="11">December</option>
+											      </select>
+											    </td>
+											    <td width="50">
+											      <select name="day" nchange="getDays(this.form.month,this.form.day,this.form.year)"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+											    </td>
+											    <td width="40">
+											      <input type="text" name="year" maxlength="4" onchange="getDays(this.form.month,this.form.day,this.form.year)" value="" style="width:50px;">
+											    </td>
+											  </tr>
+											 </tbody>
+											</table>
+											</h3>
+											
+											<h3>
+											 <table width="420" style="border:1px black solid;border-left:0;border-right:0;background-color:#ffd;">
+											  <tbody>
+											   <tr>
+											    <td class="content" nowrap="">New Time Value:</td>
+											    <td width="100%"><input name="epoch" accesskey="2" value="[|| form.epoch]"></td>
+												<td align="right" colspan="2">
+											      <button style="width:90px;" onclick="document.getElementById(&#39;dynamo&#39;).innerHTML = toDate(this.form.epoch)" accesskey="o">T<u>o</u> Date</button>
+											    </td>
+											   </tr>
+											  </tbody>
+											 </table>
+											</h3>
+										  </form>
+										</table>
+										
+
+<script type="text/javascript">
+
+if (!window.dDate) { window.dDate = new Date(); }
+
+window.getEpoch = function(){
+  var GMT = document.ivnForm.GMT.checked
+  if(GMT){ 
+    var x = parseInt(Date.UTC(dDate.getUTCFullYear(),dDate.getUTCMonth(),dDate.getUTCDate(),dDate.getUTCHours(),dDate.getUTCMinutes(),dDate.getUTCSeconds(),dDate.getUTCMilliseconds())/1000);
+    return x;
+  } else {
+    var x = (dDate.getTime()-dDate.getMilliseconds())/1000;
+//    x += dDate.getTimezoneOffset();
+    return x;
+  }
+}
+
+window.getDays = function(mObj,dObj,yObj){
+  // build array of days in a select container based on selected month and year
+  iMonth=parseInt(mObj.options[mObj.selectedIndex].value)+1
+  iYear=(yObj.value?yObj.value:1900);
+
+  var iDays=31;
+  switch(iMonth){ /* determine the number of days this month including leap years */
+    case 4: case 6: case 9: case 11:  --iDays; break;
+    case 2: iDays=29; if (!((iYear%4==0)&&(iYear%100!= 0))||(iYear%400== 0)) --iDays;
+  }
+
+  dObj.options.length = 0;
+  for(var i=0; i<iDays; i++){
+    dObj.options[i] = new Option(i+1,i+1)
+  }
+}
+
+window.toDate = function(eObj){
+  var mEpoch = parseInt(eObj.value); 
+  if(mEpoch<10000000000) mEpoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
+
+  dDate.setTime(mEpoch)
+  return dDate;
+}
+
+window.toEpoch = function(mObj,dObj,yObj,hrObj,minObj,secObj){
+  var month = mObj.options[mObj.selectedIndex].value
+  var day = dObj.options[dObj.selectedIndex].value
+  var year = yObj.value
+  var hour = hrObj.options[hrObj.selectedIndex].value
+  var minute = minObj.options[minObj.selectedIndex].value
+  var second = secObj.options[secObj.selectedIndex].value
+
+  //alert(month+']['+day+']['+year)
+  dDate.setMonth(month,day)
+  dDate.setFullYear(year)
+  dDate.setHours(hour,minute,second)
+  //alert(dDate)
+
+  var zObj = document.getElementById('dynamo')
+  zObj.innerHTML = window.getEpoch()
+  if(window && window.clipboardData && window.clipboardData.setData)
+    bResult = window.clipboardData.setData("Text",zObj.innerHTML); //stuff the text onto the clipboard
+
+}
+</script>
+
+<script type="text/javascript">
+
+function populateDates(){
+  var fobj = document.forms.ivnForm
+  if(fobj.GMT.checked){
+    // GMT TIME
+    window.dDate = new Date(Date.UTC(dDate.getUTCFullYear(),dDate.getUTCMonth(),dDate.getUTCDate(),dDate.getUTCHours(),dDate.getUTCMinutes(),dDate.getUTCSeconds(),dDate.getUTCMilliseconds()));
+    fobj.month.selectedIndex = dDate.getUTCMonth(); // set initial month to current
+    fobj.year.value = dDate.getUTCFullYear()
+    getDays(fobj.month,fobj.day,fobj.year)
+    fobj.day.selectedIndex = dDate.getUTCDate()-1
+    fobj.epoch.value = window.getEpoch()
+    fobj.hour.selectedIndex = dDate.getUTCHours();
+    fobj.minute.selectedIndex = dDate.getUTCMinutes();
+    fobj.second.selectedIndex = dDate.getUTCSeconds();
+  } else {
+    // LOCAL TIME
+    window.dDate = new Date();
+    fobj.month.selectedIndex = dDate.getMonth(); // set initial month to current
+    fobj.year.value = dDate.getFullYear()
+    getDays(fobj.month,fobj.day,fobj.year)
+    fobj.day.selectedIndex = dDate.getDate()-1
+    fobj.epoch.value = window.getEpoch()
+    fobj.hour.selectedIndex = dDate.getHours();
+    fobj.minute.selectedIndex = dDate.getMinutes();
+    fobj.second.selectedIndex = dDate.getSeconds();
+  }
+  
+  var GMT = document.ivnForm.GMT.checked
+  if(GMT){
+    var html = parseInt(Date.UTC(dDate.getUTCFullYear(),dDate.getUTCMonth(),dDate.getUTCDate(),dDate.getUTCHours(),dDate.getUTCMinutes(),dDate.getUTCSeconds(),dDate.getUTCMilliseconds())/1000)+' (Epoch)'
+    + '<br>'+dDate.toUTCString()+' (Standard)'
+  } else {
+    var html = (dDate.getTime()-dDate.getMilliseconds())/1000+' (Epoch)'
+    + '<br>'+dDate+' (Standard)'
+  }
+  if(document && document.getElementById){
+    obj = document.getElementById('jdate1')
+    if(obj) obj.innerHTML = html
+  }
+}
+
+</script>
+
+
+<script>
+
+/* have the date in the example generated dynamically */
+var d = new Date(); 
+var syear = d.getFullYear() + 1;  // next year
+var tyears = syear-1970;
+var tdays = tyears * 365;
+var tseconds = 0;
+function dw(x){ document.write(x); }
+function years_2_seconds(n){ return n * 86400 }
+function days_2_seconds(n){ /* ? */ }
+function sanity_check(n,note){
+  if(!note) note = '';
+  var d=new Date();
+  alert('Converting what we\'ve got so far into seconds...\n\nEpoch = '+d.getTime(n)+'\nDate = '+d+'\n\n'+note);
+  return false;
+}
+</script>
+									
+									</section>
+									
+									<!-- section 7 --><!-- demo -->
+									<section id="section-topline-7">
+										
+										<!-- app -->
+										<div id="app" v-cloak>
+										
+										  <!-- data usage -->
+										  <div id="data_usage" v-show="cert_user_id && dataSizeMax && dataSize" title="space remaining"> Using: {{ dataUsage || '' }}</div>
+										  
+										  <!-- dev warning -->
+										  <div id="dev_warning" v-show="!readNote">
+											<b>Select user</b>, make changes, click <b>Save</b> to publish.
+											<span id="close_dev_warning" @click="readNote=true">X</span>
+										  </div>
+											
+										  <span id="user_status">
+											<a href="#Select+user" id="select_user" @click="selectUser" title="{{ cert_user_id || '' }}">{{ cert_user_id ? 'logout' : 'select user'}}</a>
+										  </span>
+										 
+										 <!-- middle -->
+										 <div id="middle">
+										
+										  <!-- left -->
+										  <div id="left">
+										   <div id="button-bar">
+											 <div class="button-bar-button"
+												 @click="addNewTodo"
+												 title="Add new item"> + </div>
+											 <div class="button-bar-button green"
+												 :class="{'pulsate': saving}"
+												 @click="saveUserData"
+												 v-show="cert_user_id && needsSaving"
+												 transition="appear"
+												 title="Save and publish changes">{{ saving ? 'Saving' : 'Save' }}</div>
+										   </div>
+										   <div class="lists">
+										    <ul>
+											<li v-for="todo in todos"
+											  class="pointer"
+											  transition="expand"
+											  @click="todoClicked($index)"
+											  @dblclick="editTodo(todo, $index)"
+											  draggable="true"
+											  :class="todoClasses($index)"
+											  @dragstart="dragStart($event, $index, todo)"
+											  @dragover.prevent="dragover = $index"
+											  @drop.prevent="dropped(todo, $index)"
+											  @dragend="endDrag">
+											 <span v-show="editingTodo !== $index">
+											  {{ todo.title }}
+											  <span class="task-count">{{ taskCount(todo) || '' }}</span>
+											 </span>
+											 <span v-else>
+											  <input class="edit-todo-input"
+												 type="text"
+												 v-model="editedTodo"
+												 @keyup.enter="editTodoDone(todo)"
+												 @keyup.esc="cancelEditingTodo(todo)"
+												 v-task-focus="editingTodo === $index" />
+											 </span>
+											</li>
+										   </ul>
+										   </div>
+										   <div class="spacer-v"></div>
+										  </div>
+										
+										  <!-- right -->
+										  <div id="right">
+										   <ul>
+											<li style="display: flex;">
+												<input id="new-task-input" type="text" v-model="newTask" placeholder="Enter a new task here" @keyup.enter="addTask"/>
+											</li>
+											<li v-for="task in todos[selected_todo].tasks"
+											  @dblclick="editTask(task, $index)"
+											  transition="expand"
+											  draggable="true"
+											  :class="taskClasses($index)"
+											  @dragstart="dragStart($event, $index, task)"
+											  @dragover.prevent="dragover = $index"
+											  @drop.prevent="dropped(task, $index)"
+											  @dragend="endDrag">
+											  <div v-show="editingTask !== $index">
+												<input type="checkbox" v-model="task.checked" />
+												<span v-bind:class="{'task-done': task.checked}">{{ task.text }}</span>
+												<span class="delete-x" @click="deleteTask(task)">X</span>
+											  </div>
+											  <div v-else class="flex-edit">
+												<input type="text"
+													 v-model="editedTask"
+													 @keyup.enter="editTaskDone(task)"
+													 @keyup.esc="cancelEditingTask(task)"
+													 v-task-focus="editingTask === $index" />
+												<button @click="cancelEditingTask(task)" style="margin-top: 6px">Cancel</button>
+											  </div>
+											</li>
+										   </ul>
+										   <div style="padding: 5px">
+											<button class="black" @click="shareList(selected_todo)" style="opacity: 0.45">Share List</button>&nbsp;
+											<button class="black" @click="deleteTodo(selected_todo)">Delete list</button>&nbsp;
+											<!-- button class="black" @click="clearCompleted">Clear completed</button -->
+										   </div>
+										  </div>
+										  
+										 </div>
+										 
+										</div>
+										<!-- /app -->
+									
+									</section>
+									
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<span id="useid"></span>
+	
+	<tt><span id="users"></span></tt>
+	
+	<!-- browse file -->
+	<div id="loading">
+		<span id="zone1"> <fieldset>
+			<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" style="margin: 14px 0 0 0; width: 200px;">
+		</fieldset> </span>
+	</div>
+	
+	<!-- drag n drop -->
+	<div id="loader">
+		<span id="zone"> <fieldset>
+			<div id="filedrag" style="margin: 5px 0 0 25px;"><a class="btn btn-primary btn-large">Drag DB here</a></div>
+		</fieldset> </span>
+	</div>
+	
+	<!-- loaded -->
+	<div id="loaded" style="visibility: hidden"><div id="fileStatus" class="alert alert-success hidden"></div></div>
+	
+	<!-- bottom -->
+	<!-- div id="bottom" v-show="footer" transition="vanish">
+		<br>[ Todo #1 - make lists public so logged in users can see and edit them  ]
+		<br>&nbsp;[ ____ #2 - add chat, user id stuff... ___________________________ ]
+		<br><br>
+	</div -->
+	
+	<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+	<script src="./app/libs/jquery.min.js">	</script>
+	<script src="./app/libs/cmirror.min.js">	</script>
+	<script src="./app/libs/mode/sqlite.js">	</script>
+	<script src="./app/libs/bstrap.min.js">	</script>
+	<script src="./app/libs/sql.js">			</script>
+	<script src="./app/libs/sql.min.js">		</script>
+	<script src="./app/libs/vue.min.js">		</script>
+	
+	<script src="./app/js/buzz.min.js">    </script>
+	<script src="./app/js/sqeek.js">       </script>
+	<script src="./app/js/modkustom.js">   </script>
+	<script src="./app/js/modalEffects.js"></script>
+	<script src="./app/js/createTable.js"> </script>
+	<script src="./app/js/cbpFWTabs.js">   </script>
+	<script src="./app/js/classie.js">     </script>
+	<script src="./app/js/coffee.js">      </script>
+	<script>if (window.module) { module = window.module; }</script>
+	
+<script>
+
+$(document).ready(function () {
+	
+	$('body').hide();
+	$('html').css('visibility', 'visible');
+	$('body').fadeIn(1750);
+	
+	<!-- check databases -->
+	// initDatabase(); // sqeek.js
+	
+	// sql edit (fixing....)
+	$('#btnCreate').click(insertRecord);
+    // $('#btnUpdate').click(updateRecord);
+    // $('#btnReset').click(resetForm);
+    // $('#btnDrop').click(dropTable);
+	document.getElementById("message").focus();
+	
+	populateDates();
+	
+});
+
+</script>
+
+<!-- todo -->
+<script>
+function showDiff() { document.getElementById('showDiff').style.opacity = '1.0'; }
+</script>
+
+<!-- shell console -->
+<script>
+	// var first = decodeURI(location.search.substr(1)); // ?
+ 	sql.options.logtarget = 'myconsole';
+	sql.prompt('shell','useid');
+	// sql.prompt('shell','useid', first); // ?
+</script>
+
+<!-- codemirrors -->
+<script>
+
+// sql editor
+var coms = document.getElementById("commands");
+var sql_edit = CodeMirror.fromTextArea(coms, {
+	mode: 'sqlite',
+	theme: 'custom',
+	lineNumbers: false,
+	lineWrapping: true,
+	matchBrackets: true,
+	// viewportMargin: Infinity,
+	showCursorWhenSelecting: true
+});
+$('.CodeMirror.cm-s-custom').on('change',function(e) { coms.value = sql_edit.getValue(); });
+
+// json editor
+var outp = document.getElementById('output');
+var out_edit = CodeMirror.fromTextArea(outp, {
+	mode: 'javascript',
+	theme: 'ambiance',
+	lineNumbers: false,
+	lineWrapping: true,
+	matchBrackets: true,
+	// viewportMargin: Infinity,
+	showCursorWhenSelecting: true
+});
+$('.CodeMirror.cm-s-ambiance').on('change',function(e) { outp.value = out_edit.getValue(); });
+
+/*
+function forEachCodeMirror(func) {
+	if (!document.body.getElementsByClassName) { return; }
+	var cmClasses = document.body.getElementsByClassName("CodeMirror");
+	for (var i = 0; i < cmClasses.length; i++) {
+	  var cm = cmClasses[i].CodeMirror;
+	  if (cm) { func(cm); }
+	}
+}
+*/
+
+</script>
+
+<!-- ui -->
+<script>
+
+(function() {
+ [].slice.call( document.querySelectorAll('.tabs') ).forEach( function(el) { new CBPFWTabs(el); });
+})();
+
+$(function() {
+ var $ui = $('#ui_element');
+ 
+ /**
+ * on focus and on click display the dropdown, and change the arrow image
+ */
+ $ui.find('.sb_input').bind('focus click',function() {
+	$ui.find('.sb_down')
+		.addClass('sb_up')
+		.removeClass('sb_down')
+		.andSelf()
+		.find('.sb_dropdown')
+		.show();
+ });
+ 
+ /**
+ * on mouse leave hide the dropdown, and change the arrow image
+ */
+ $ui.bind('mouseleave',function() {
+	$ui.find('.sb_up')
+		.addClass('sb_down')
+		.removeClass('sb_up')
+		.andSelf()
+		.find('.sb_dropdown')
+		.hide();
+ });
+
+ /**
+ * selecting all checkboxes
+ */
+ $ui.find('.sb_dropdown').find('label[for="all"]').prev().bind('click',function() {
+	$(this).parent().siblings().find(':checkbox').attr('checked',this.checked).attr('disabled',this.checked);
+ });
+
+});
+
+ // load (paused)
+ // $('#json-load').click(function() { $('#output').fadeOut(); });
+ // save (pending)
+ // $('#json-save').click(function() { $('#output').fadeOut(); });
+ // view (todo: codemirrorize)
+ $('#json-view').click(function() { if ($('#output').is(':visible')) { $('#output').fadeOut(); } else { $('#output').fadeIn(); } });
+ 
+</script>
+
+<!-- a class="btn btn-small new-row hidden" data-toggle="modal" href="#id_new-row-modal"><i class="icon-plus-sign"></i> New row</a -->
+
+</body>
+</html>
+

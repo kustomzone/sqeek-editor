@@ -1,21 +1,18 @@
-Electron ZeroChess
-==================
+Sqeek Editor
+============
 
-ZeroChess is a mashup of the ZeroNet app including;
+Sqeek Editor (wip) is an Electron port of the ZeroNet app.
 
-* chessboard.js  : https://github.com/oakmac/chessboardjs
-* garbochess.js  : https://github.com/glinscott/garbochess-js
-* jhlywachess.js : https://github.com/jhlywa/chess.js
 
 ## Install
 
 ```
-git clone https://github.com/kustomzone/zerochess.git
-cd zerochess
+git clone https://github.com/kustomzone/sqeek-editor.git
+cd sqeek-editor
 npm install && npm start
 ```
 
 License
 --------------------------------------
 
-ZeroChess is released under the MIT License.
+Sqeek Editor is released under the MIT License.
